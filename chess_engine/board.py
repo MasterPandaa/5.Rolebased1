@@ -1,29 +1,36 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import List, Optional, Tuple, Dict
+from typing import Dict, List, Optional, Tuple
 
 Coord = Tuple[int, int]
 Move = Tuple[Coord, Coord]
 
-
 UNICODE_PIECES: Dict[str, str] = {
-    "wK": "\u2654", "wQ": "\u2655", "wR": "\u2656", "wB": "\u2657", "wN": "\u2658", "wP": "\u2659",
-    "bK": "\u265A", "bQ": "\u265B", "bR": "\u265C", "bB": "\u265D", "bN": "\u265E", "bP": "\u265F",
+    "wK": "\u2654",
+    "wQ": "\u2655",
+    "wR": "\u2656",
+    "wB": "\u2657",
+    "wN": "\u2658",
+    "wP": "\u2659",
+    "bK": "\u265a",
+    "bQ": "\u265b",
+    "bR": "\u265c",
+    "bB": "\u265d",
+    "bN": "\u265e",
+    "bP": "\u265f",
 }
 
-
-START_FEN = (
-    [
-        ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
-        ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, None, None, None],
-        ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
-        ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
-    ]
-)
+START_FEN = [
+    ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
+    ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
+    ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
+]
 
 
 @dataclass
@@ -88,4 +95,7 @@ class Board:
         return out
 
     def to_unicode(self) -> List[List[str]]:
-        return [[UNICODE_PIECES.get(cell, "") if cell else "" for cell in row] for row in self.grid]
+        return [
+            [UNICODE_PIECES.get(cell, "") if cell else "" for cell in row]
+            for row in self.grid
+        ]

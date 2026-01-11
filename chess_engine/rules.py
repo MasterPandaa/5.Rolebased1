@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import List, Tuple, Optional
+
+from typing import List, Optional, Tuple
 
 from .board import Board, Move
 
@@ -14,11 +15,32 @@ def generate_moves(board: Board) -> List[Move]:
         elif ptype == "N":
             moves.extend(_knight_moves(board, r, c, color))
         elif ptype == "B":
-            moves.extend(_slider_moves(board, r, c, color, [(-1, -1), (-1, 1), (1, -1), (1, 1)]))
+            moves.extend(
+                _slider_moves(board, r, c, color, [(-1, -1), (-1, 1), (1, -1), (1, 1)])
+            )
         elif ptype == "R":
-            moves.extend(_slider_moves(board, r, c, color, [(-1, 0), (1, 0), (0, -1), (0, 1)]))
+            moves.extend(
+                _slider_moves(board, r, c, color, [(-1, 0), (1, 0), (0, -1), (0, 1)])
+            )
         elif ptype == "Q":
-            moves.extend(_slider_moves(board, r, c, color, [(-1, -1), (-1, 1), (1, -1), (1, 1), (-1, 0), (1, 0), (0, -1), (0, 1)]))
+            moves.extend(
+                _slider_moves(
+                    board,
+                    r,
+                    c,
+                    color,
+                    [
+                        (-1, -1),
+                        (-1, 1),
+                        (1, -1),
+                        (1, 1),
+                        (-1, 0),
+                        (1, 0),
+                        (0, -1),
+                        (0, 1),
+                    ],
+                )
+            )
         elif ptype == "K":
             moves.extend(_king_moves(board, r, c, color))
     return moves
@@ -50,7 +72,16 @@ def _pawn_moves(board: Board, r: int, c: int, color: str) -> List[Move]:
 
 def _knight_moves(board: Board, r: int, c: int, color: str) -> List[Move]:
     moves: List[Move] = []
-    for dr, dc in [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]:
+    for dr, dc in [
+        (-2, -1),
+        (-2, 1),
+        (-1, -2),
+        (-1, 2),
+        (1, -2),
+        (1, 2),
+        (2, -1),
+        (2, 1),
+    ]:
         rr, cc = r + dr, c + dc
         if not board.inside(rr, cc):
             continue
@@ -60,7 +91,9 @@ def _knight_moves(board: Board, r: int, c: int, color: str) -> List[Move]:
     return moves
 
 
-def _slider_moves(board: Board, r: int, c: int, color: str, deltas: List[Tuple[int, int]]) -> List[Move]:
+def _slider_moves(
+    board: Board, r: int, c: int, color: str, deltas: List[Tuple[int, int]]
+) -> List[Move]:
     moves: List[Move] = []
     for dr, dc in deltas:
         rr, cc = r + dr, c + dc

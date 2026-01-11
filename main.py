@@ -1,10 +1,11 @@
 import sys
-import pygame
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
 
-from chess_engine.board import Board, UNICODE_PIECES
-from chess_engine.rules import generate_moves
+import pygame
+
 from chess_engine.ai import pick_move
+from chess_engine.board import UNICODE_PIECES, Board
+from chess_engine.rules import generate_moves
 
 WIDTH, HEIGHT = 640, 640
 SQUARE = WIDTH // 8
@@ -20,7 +21,13 @@ def square_at(pos: Tuple[int, int]) -> Tuple[int, int]:
     return y // SQUARE, x // SQUARE
 
 
-def draw_board(screen: pygame.Surface, board: Board, font: pygame.font.Font, selected: Optional[Tuple[int, int]], legal_moves: List[Tuple[Tuple[int, int], Tuple[int, int]]]):
+def draw_board(
+    screen: pygame.Surface,
+    board: Board,
+    font: pygame.font.Font,
+    selected: Optional[Tuple[int, int]],
+    legal_moves: List[Tuple[Tuple[int, int], Tuple[int, int]]],
+):
     for r in range(8):
         for c in range(8):
             color = LIGHT if (r + c) % 2 == 0 else DARK
@@ -50,7 +57,7 @@ def draw_board(screen: pygame.Surface, board: Board, font: pygame.font.Font, sel
     # Show legal moves for selected
     if selected is not None:
         dests = [dst for src, dst in legal_moves if src == selected]
-        for (rr, cc) in dests:
+        for rr, cc in dests:
             cx = cc * SQUARE + SQUARE // 2
             cy = rr * SQUARE + SQUARE // 2
             pygame.draw.circle(screen, MOVE_DOT, (cx, cy), 8)
@@ -90,7 +97,11 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not game_over:
+            elif (
+                event.type == pygame.MOUSEBUTTONDOWN
+                and event.button == 1
+                and not game_over
+            ):
                 pos = pygame.mouse.get_pos()
                 r, c = square_at(pos)
                 if selected is None:
@@ -99,7 +110,9 @@ def main():
                         selected = (r, c)
                 else:
                     # Try to move
-                    move_candidates = [m for m in legal_moves if m[0] == selected and m[1] == (r, c)]
+                    move_candidates = [
+                        m for m in legal_moves if m[0] == selected and m[1] == (r, c)
+                    ]
                     if move_candidates:
                         board.apply_move(move_candidates[0])
                         selected = None
@@ -113,7 +126,11 @@ def main():
                     else:
                         # Reselect if clicked own piece
                         piece = board.at(r, c)
-                        if piece and piece[0] == human_color and piece[0] == board.side_to_move:
+                        if (
+                            piece
+                            and piece[0] == human_color
+                            and piece[0] == board.side_to_move
+                        ):
                             selected = (r, c)
                         else:
                             selected = None
@@ -124,7 +141,9 @@ def main():
             if not ms:
                 game_over = True
                 side = "White" if board.side_to_move == "w" else "Black"
-                pygame.display.set_caption(f"Mini Chess - {side} has no moves. Game Over.")
+                pygame.display.set_caption(
+                    f"Mini Chess - {side} has no moves. Game Over."
+                )
             else:
                 legal_moves = ms
 
